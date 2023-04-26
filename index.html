@@ -1,70 +1,50 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Fatigue Factor Calculator</title>
-    <meta charset="utf-8" />
   </head>
   <body>
     <h1>Fatigue Factor Calculator</h1>
-    <form>
-      <label for="test-time-300">Test Time for 300m (mm:ss)</label>
-      <input type="text" id="test-time-300" required />
-      <br />
-      <label for="test-time-1.5-miles">Test Time for 1.5 Miles (mm:ss)</label>
-      <input type="text" id="test-time-1.5-miles" required />
-      <br />
-      <button id="calculate-button" type="submit">Calculate</button>
+    <p>Enter your test times below:</p>
+    <form id="fatigueFactorForm">
+      <label for="testTime300m">Test time for 300m:</label>
+      <input type="text" id="testTime300m" name="testTime300m" /><br />
+      <label for="testTime1mile">Test time for 1.5 miles:</label>
+      <input type="text" id="testTime1mile" name="testTime1mile" /><br />
+      <input type="submit" value="Calculate Fatigue Factor" />
     </form>
-    <div id="result"></div>
-    <div id="error"></div>
+    <div id="errorDiv"></div>
+    <div id="resultDiv"></div>
+
     <script>
-      const form = document.querySelector("form");
-      const resultDiv = document.getElementById("result");
-      const errorDiv = document.getElementById("error");
+      const fatigueFactorForm = document.getElementById("fatigueFactorForm");
+      const errorDiv = document.getElementById("errorDiv");
+      const resultDiv = document.getElementById("resultDiv");
 
-      form.addEventListener("submit", function (event) {
+      fatigueFactorForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        errorDiv.textContent = "";
-
-        const testTime300Input = document.getElementById("test-time-300");
-        const testTime1_5MilesInput = document.getElementById(
-          "test-time-1.5-miles"
+        const testTime300m = parseFloat(
+          document.getElementById("testTime300m").value
+        );
+        const testTime1mile = parseFloat(
+          document.getElementById("testTime1mile").value
         );
 
-        const testTime300 = testTime300Input.value;
-        const testTime1_5Miles = testTime1_5MilesInput.value;
-
-        if (!isValidTime(testTime300) || !isValidTime(testTime1_5Miles)) {
-          errorDiv.textContent = "Invalid time format. Please use mm:ss.";
+        if (isNaN(testTime300m) || isNaN(testTime1mile)) {
+          errorDiv.textContent = "Please enter valid test times.";
           resultDiv.textContent = "";
-          return;
+        } else {
+          const fatigueFactor =
+            (Math.log(testTime300m / testTime1mile) /
+              Math.log(300 / (1609 * 1.5))) *
+            100 -
+            100;
+          resultDiv.textContent = `Fatigue Factor: ${fatigueFactor.toFixed(
+            1
+          )}% (Optimal: 20-21%)`;
+          errorDiv.textContent = "";
         }
-
-        const fatigueFactor = calculateFatigueFactor(
-          convertTimeToSeconds(testTime300),
-          convertTimeToSeconds(testTime1_5Miles)
-        );
-
-        resultDiv.textContent = `Fatigue Factor: ${fatigueFactor.toFixed(
-          1
-        )}% (Optimal: 20-21%)`;
       });
-
-      function isValidTime(timeString) {
-        return /^\d{1,2}:\d{2}$/.test(timeString);
-      }
-
-      function convertTimeToSeconds(timeString) {
-        const [minutes, seconds] = timeString.split(":");
-        return parseInt(minutes) * 60 + parseInt(seconds);
-      }
-
-      function calculateFatigueFactor(testTime300, testTime1_5Miles) {
-        return (
-          (Math.log(testTime300 / testTime1_5Miles) /
-            Math.log(300 / (1609 * 1.5))) *
-          100
-        );
-      }
     </script>
   </body>
 </html>
