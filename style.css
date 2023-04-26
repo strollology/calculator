@@ -43,6 +43,10 @@ button:hover {
 }
 
 #result {
+  display: block;
+}
+
+#result {
 	font-size: 24px;
 	text-align: center;
 	margin-top: 20px;
