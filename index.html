@@ -44,8 +44,8 @@
 			    const fatigueFactor =
 			      Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
 
-			resultDiv.textContent =
-  "Fatigue Factor: " + fatigueFactor.toFixed(1) + "%";
+			    resultDiv.textContent =
+			      "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%";
 resultDiv.textContent += " (Optimal: 20-21%)";
 			  }
 			});
