@@ -1,46 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <title>Fatigue Factor Calculator</title>
   </head>
   <body>
     <h1>Fatigue Factor Calculator</h1>
-    <p>Enter your test times below:</p>
-    <form id="fatigueFactorForm">
-      <label for="testTime300m">Test time for 300m:</label>
-      <input type="text" id="testTime300m" name="testTime300m" /><br />
-      <label for="testTime1mile">Test time for 1.5 miles:</label>
-      <input type="text" id="testTime1mile" name="testTime1mile" /><br />
-      <input type="submit" value="Calculate Fatigue Factor" />
+    <form>
+      <label for="test300mSeconds">Test time for 300m (in seconds):</label>
+      <input type="text" id="test300mSeconds" name="test300mSeconds" /><br />
+
+      <label for="test1_5mileSeconds"
+        >Test time for 1.5 miles (in minutes and seconds, separated by colon):</label
+      >
+      <input
+        type="text"
+        id="test1_5mileMinutes"
+        name="test1_5mileMinutes"
+        size="2"
+      />
+      :
+      <input
+        type="text"
+        id="test1_5mileSeconds"
+        name="test1_5mileSeconds"
+        size="2"
+      />
+      <br />
+      <button type="button" id="calculateButton">Calculate</button>
     </form>
     <div id="errorDiv"></div>
     <div id="resultDiv"></div>
-
     <script>
-const calculateButton = document.querySelector("#calculate-button");
-const test1_5mileInput = document.querySelector("#test-1-5-mile-input");
-const test300mInput = document.querySelector("#test-300m-input");
-const resultDiv = document.querySelector("#result");
-const errorDiv = document.querySelector("#error");
+      const calculateButton = document.getElementById("calculateButton");
+      const resultDiv = document.getElementById("resultDiv");
+      const errorDiv = document.getElementById("errorDiv");
 
-calculateButton.addEventListener("click", () => {
-  const test1_5mileSeconds = Number(test1_5mileInput.value);
-  const test300mSeconds = Number(test300mInput.value);
+      calculateButton.addEventListener("click", function () {
+        const test300mSeconds = parseFloat(
+          document.getElementById("test300mSeconds").value
+        );
+        const test1_5mileMinutes = parseInt(
+          document.getElementById("test1_5mileMinutes").value
+        );
+        const test1_5mileSeconds = parseInt(
+          document.getElementById("test1_5mileSeconds").value
+        );
 
-  if (isNaN(test1_5mileSeconds) || isNaN(test300mSeconds)) {
-    errorDiv.textContent = "Please enter valid numbers.";
-    resultDiv.textContent = "";
-    return;
-  }
+        if (
+          isNaN(test300mSeconds) ||
+          isNaN(test1_5mileMinutes) ||
+          isNaN(test1_5mileSeconds)
+        ) {
+          errorDiv.textContent = "Please enter valid numbers";
+          resultDiv.textContent = "";
+          return;
+        }
 
-  errorDiv.textContent = "";
+        const test1_5mileSecondsTotal = test1_5mileMinutes * 60 + test1_5mileSeconds;
 
-  const fatigueFactor =
-    Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
+        const fatigueFactor =
+          Math.log(test1_5mileSecondsTotal / test300mSeconds) /
+          Math.log(300 / (1609 * 1.5));
 
-  resultDiv.textContent =
-    "Fatigue Factor: " + ((fatigueFactor - 1) * 100).toFixed(1) + "% (Optimal: 20-21%)";
-});
+        const fatigueFactorPercent = (fatigueFactor - 1) * 100;
+        resultDiv.textContent =
+          "Fatigue Factor: " + fatigueFactorPercent.toFixed(1) + "%" + " (Optimal: 20-21%)";
+        errorDiv.textContent = "";
+      });
     </script>
   </body>
 </html>
