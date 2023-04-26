@@ -47,6 +47,7 @@
 
 			    resultDiv.textContent =
 			      "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%";
+				    }
 				    if (fatigueFactor < 0.2) {
 			    	priorityInput.value = "Speed";
 			    } else if (fatigueFactor > 0.21) {
@@ -54,7 +55,7 @@
 			    } else {
 			    	priorityInput.value = "Balanced";
 			    }
-			  }
+			
 			});
 		});
 	</script>
