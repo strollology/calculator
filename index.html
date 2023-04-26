@@ -14,6 +14,7 @@
 		<button type="button" id="calculate">Calculate</button>
 		<div id="error"></div>
 		<div id="result"></div>
+		<div id="priority"></div>
 		<div id="optimal">Optimal: 20-21%</div>
 	</form>
 	<script>
@@ -28,6 +29,7 @@
 			const calculateButton = document.getElementById("calculate");
 			const errorDiv = document.getElementById("error");
 			const resultDiv = document.getElementById("result");
+			const priorityDiv = document.getElementById("priority");
 
 			calculateButton.addEventListener("click", () => {
 			  const test300m = document.getElementById("test300m").value;
@@ -36,6 +38,7 @@
 			  if (test300m === "" || test1_5mile === "") {
 			    errorDiv.textContent = "Please enter both test times.";
 			    resultDiv.textContent = "";
+			    priorityDiv.textContent = "";
 			  } else {
 			    errorDiv.textContent = "";
 
@@ -47,15 +50,15 @@
 
 			    resultDiv.textContent =
 			      "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%";
-				    }
-				    if (fatigueFactor < 0.2) {
-			    	priorityInput.value = "Speed";
+
+			    if (fatigueFactor < 0.2) {
+			      priorityDiv.textContent = "Training Priority: Speed";
 			    } else if (fatigueFactor > 0.21) {
-			    	priorityInput.value = "Endurance";
+			      priorityDiv.textContent = "Training Priority: Endurance";
 			    } else {
-			    	priorityInput.value = "Balanced";
+			      priorityDiv.textContent = "Training Priority: Balanced";
 			    }
-			
+			  }
 			});
 		});
 	</script>
