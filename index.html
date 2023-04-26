@@ -17,46 +17,31 @@
     <div id="resultDiv"></div>
 
     <script>
-     const testForm = document.querySelector("#test-form");
-const test300mInput = document.querySelector("#test-300m-input");
+const calculateButton = document.querySelector("#calculate-button");
 const test1_5mileInput = document.querySelector("#test-1-5-mile-input");
-const resultDiv = document.querySelector("#result-div");
-const errorDiv = document.querySelector("#error-div");
+const test300mInput = document.querySelector("#test-300m-input");
+const resultDiv = document.querySelector("#result");
+const errorDiv = document.querySelector("#error");
 
-testForm.addEventListener("submit", function (event) {
-  event.preventDefault();
+calculateButton.addEventListener("click", () => {
+  const test1_5mileSeconds = Number(test1_5mileInput.value);
+  const test300mSeconds = Number(test300mInput.value);
 
-  // Clear previous error messages
-  errorDiv.textContent = "";
-
-  // Get test times in seconds
-  const test300mSeconds = test300mInput.value * 60;
-  const test1_5mileSeconds = convertToSeconds(test1_5mileInput.value);
-
-  // Check if inputs are valid
-  if (isNaN(test300mSeconds) || isNaN(test1_5mileSeconds)) {
-    errorDiv.textContent = "Please enter valid test times.";
+  if (isNaN(test1_5mileSeconds) || isNaN(test300mSeconds)) {
+    errorDiv.textContent = "Please enter valid numbers.";
+    resultDiv.textContent = "";
     return;
   }
 
-  // Calculate fatigue factor
+  errorDiv.textContent = "";
+
   const fatigueFactor =
     Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
 
   resultDiv.textContent =
-    "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%" + " (Optimal: 20-21%)";
+    "Fatigue Factor: " + ((fatigueFactor - 1) * 100).toFixed(1) + "% (Optimal: 20-21%)";
 });
 
-// Function to convert time format "mm:ss" to seconds
-function convertToSeconds(time) {
-  const timeArray = time.split(":");
-  const minutes = parseInt(timeArray[0]);
-  const seconds = parseInt(timeArray[1]);
-  return minutes * 60 + seconds;
-}
-
-        }
-      });
     </script>
   </body>
 </html>
