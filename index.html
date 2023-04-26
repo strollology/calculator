@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fatigue Factor Calculator</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+	<title>Fatigue Factor Calculator</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <h1>Fatigue Factor Calculator</h1>
-  <form>
-    <label for="test300m">300m Test Time (mm:ss.t):</label>
-    <input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
-    <label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
-    <input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
-    <button type="button" id="calculate">Calculate</button>
-    <div id="result"></div> <!-- Add this line -->
-  </form>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    function timeToSeconds(time) {
-      const parts = time.split(":");
-      const minutes = parseInt(parts[0]);
-      const seconds = parseFloat(parts[1]);
-      return minutes * 60 + seconds;
-    }
+	<h1>Fatigue Factor Calculator</h1>
+	<form>
+		<label for="test300m">300m Test Time (mm:ss.t):</label>
+		<input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
+		<label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
+		<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
+		<button type="button" id="calculate">Calculate</button>
+		<div id="result"></div>
+		<div id="error"></div> <!-- Add this line -->
+	</form>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		function timeToSeconds(time) {
+		  const parts = time.split(":");
+		  const minutes = parseInt(parts[0]);
+		  const seconds = parseFloat(parts[1]);
+		  return minutes * 60 + seconds;
+		}
 
-    document.addEventListener("DOMContentLoaded", function() {
-      const calculateButton = document.getElementById("calculate");
-      const errorDiv = document.getElementById("error");
-      const resultDiv = document.getElementById("result");
+		document.addEventListener("DOMContentLoaded", function() {
+			const calculateButton = document.getElementById("calculate");
+			const errorDiv = document.getElementById("error");
+			const resultDiv = document.getElementById("result");
 
-      calculateButton.addEventListener("click", () => {
-        const test300m = document.getElementById("test300m").value;
-        const test1_5mile = document.getElementById("test1_5mile").value;
+			calculateButton.addEventListener("click", () => {
+			  const test300m = document.getElementById("test300m").value;
+			  const test1_5mile = document.getElementById("test1_5mile").value;
 
-        if (test300m === "" || test1_5mile === "") {
-          errorDiv.textContent = "Please enter both test times.";
-          resultDiv.textContent = "";
-        } else {
-          errorDiv.textContent = "";
+			  if (test300m === "" || test1_5mile === "") {
+			    errorDiv.textContent = "Please enter both test times.";
+			    resultDiv.textContent = "";
+			  } else {
+			    errorDiv.textContent = "";
 
-          const test300mSeconds = timeToSeconds(test300m);
-          const test1_5mileSeconds = timeToSeconds(test1_5mile);
+			    const test300mSeconds = timeToSeconds(test300m);
+			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-          const fatigueFactor =
-            ((test1_5mileSeconds / test300mSeconds) - 1) * 100;
+			    const fatigueFactor =
+			      ((test1_5mileSeconds / test300mSeconds) - 1) * 100;
 
-          resultDiv.textContent =
-            "Fatigue Factor: " + fatigueFactor.toFixed(1) + "%";
-        }
-      });
-    });
-  </script>
+			    resultDiv.textContent =
+			      "Fatigue Factor: " + fatigueFactor.toFixed(1) + "%";
+			  }
+			});
+		});
+	</script>
 </body>
 </html>
