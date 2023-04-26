@@ -14,8 +14,8 @@
 		<button type="button" id="calculate">Calculate</button>
 		<div id="error"></div>
 		<div id="result"></div>
-		<div id="priority"></div>
 		<div id="optimal">Optimal: 20-21%</div>
+		<div id="priority"></div>
 	</form>
 	<script>
 		function timeToSeconds(time) {
@@ -46,12 +46,12 @@
 			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
 			    const fatigueFactor =
-			      Math.log(test1_5mileSeconds / test300mSeconds) / Math.log((300 / (1609 * 1.5)));
+			      Math.log(test300mSeconds / test1_5mileSeconds) / Math.log(300 / (1609 * 1.5)) - 1;
 
 			    resultDiv.textContent =
-			      "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%";
+			      "Fatigue Factor: " + (fatigueFactor * 100).toFixed(2) + "%";
 
-			    if (fatigueFactor < 0.2) {
+			    if (fatigueFactor < 0.20) {
 			      priorityDiv.textContent = "Training Priority: Speed";
 			    } else if (fatigueFactor > 0.21) {
 			      priorityDiv.textContent = "Training Priority: Endurance";
