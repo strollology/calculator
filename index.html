@@ -17,32 +17,44 @@
     <div id="resultDiv"></div>
 
     <script>
-      const fatigueFactorForm = document.getElementById("fatigueFactorForm");
-      const errorDiv = document.getElementById("errorDiv");
-      const resultDiv = document.getElementById("resultDiv");
+     const testForm = document.querySelector("#test-form");
+const test300mInput = document.querySelector("#test-300m-input");
+const test1_5mileInput = document.querySelector("#test-1-5-mile-input");
+const resultDiv = document.querySelector("#result-div");
+const errorDiv = document.querySelector("#error-div");
 
-      fatigueFactorForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const testTime300m = parseFloat(
-          document.getElementById("testTime300m").value
-        );
-        const testTime1mile = parseFloat(
-          document.getElementById("testTime1mile").value
-        );
+testForm.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-        if (isNaN(testTime300m) || isNaN(testTime1mile)) {
-          errorDiv.textContent = "Please enter valid test times.";
-          resultDiv.textContent = "";
-        } else {
-          const fatigueFactor =
-            (Math.log(testTime300m / testTime1mile) /
-              Math.log(300 / (1609 * 1.5))) *
-            100 -
-            100;
-          resultDiv.textContent = `Fatigue Factor: ${fatigueFactor.toFixed(
-            1
-          )}% (Optimal: 20-21%)`;
-          errorDiv.textContent = "";
+  // Clear previous error messages
+  errorDiv.textContent = "";
+
+  // Get test times in seconds
+  const test300mSeconds = test300mInput.value * 60;
+  const test1_5mileSeconds = convertToSeconds(test1_5mileInput.value);
+
+  // Check if inputs are valid
+  if (isNaN(test300mSeconds) || isNaN(test1_5mileSeconds)) {
+    errorDiv.textContent = "Please enter valid test times.";
+    return;
+  }
+
+  // Calculate fatigue factor
+  const fatigueFactor =
+    Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
+
+  resultDiv.textContent =
+    "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%" + " (Optimal: 20-21%)";
+});
+
+// Function to convert time format "mm:ss" to seconds
+function convertToSeconds(time) {
+  const timeArray = time.split(":");
+  const minutes = parseInt(timeArray[0]);
+  const seconds = parseInt(timeArray[1]);
+  return minutes * 60 + seconds;
+}
+
         }
       });
     </script>
