@@ -1,54 +1,70 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<title>Fatigue Factor Calculator</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-	<h1>Fatigue Factor Calculator</h1>
-	<form>
-		<label for="test300m">300m Test Time (mm:ss.t):</label>
-		<input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
-		<label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
-		<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
-		<button type="button" id="calculate">Calculate</button>
-		<div id="result"></div>
-	</form>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		function timeToSeconds(time) {
-		  const parts = time.split(":");
-		  const minutes = parseInt(parts[0]);
-		  const seconds = parseFloat(parts[1]);
-		  return minutes * 60 + seconds;
-		}
+  <head>
+    <title>Fatigue Factor Calculator</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>Fatigue Factor Calculator</h1>
+    <form>
+      <label for="test-time-300">Test Time for 300m (mm:ss)</label>
+      <input type="text" id="test-time-300" required />
+      <br />
+      <label for="test-time-1.5-miles">Test Time for 1.5 Miles (mm:ss)</label>
+      <input type="text" id="test-time-1.5-miles" required />
+      <br />
+      <button id="calculate-button" type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+    <div id="error"></div>
+    <script>
+      const form = document.querySelector("form");
+      const resultDiv = document.getElementById("result");
+      const errorDiv = document.getElementById("error");
 
-		document.addEventListener("DOMContentLoaded", function() {
-			const calculateButton = document.getElementById("calculate");
-			const errorDiv = document.getElementById("error");
-			const resultDiv = document.getElementById("result");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        errorDiv.textContent = "";
 
-			calculateButton.addEventListener("click", () => {
-			  const test300m = document.getElementById("test300m").value;
-			  const test1_5mile = document.getElementById("test1_5mile").value;
+        const testTime300Input = document.getElementById("test-time-300");
+        const testTime1_5MilesInput = document.getElementById(
+          "test-time-1.5-miles"
+        );
 
-			  if (test300m === "" || test1_5mile === "") {
-			    errorDiv.textContent = "Please enter both test times.";
-			    resultDiv.textContent = "";
-			  } else {
-			    errorDiv.textContent = "";
+        const testTime300 = testTime300Input.value;
+        const testTime1_5Miles = testTime1_5MilesInput.value;
 
-			    const test300mSeconds = timeToSeconds(test300m);
-			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
+        if (!isValidTime(testTime300) || !isValidTime(testTime1_5Miles)) {
+          errorDiv.textContent = "Invalid time format. Please use mm:ss.";
+          resultDiv.textContent = "";
+          return;
+        }
 
-			    const fatigueFactor =
-			      Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
+        const fatigueFactor = calculateFatigueFactor(
+          convertTimeToSeconds(testTime300),
+          convertTimeToSeconds(testTime1_5Miles)
+        );
 
-			    resultDiv.textContent =
-			      "Fatigue Factor: " + (fatigueFactor - 1) * 100 + "%";
-			  }
-			});
-		});
-	</script>
-</body>
+        resultDiv.textContent = `Fatigue Factor: ${fatigueFactor.toFixed(
+          1
+        )}% (Optimal: 20-21%)`;
+      });
+
+      function isValidTime(timeString) {
+        return /^\d{1,2}:\d{2}$/.test(timeString);
+      }
+
+      function convertTimeToSeconds(timeString) {
+        const [minutes, seconds] = timeString.split(":");
+        return parseInt(minutes) * 60 + parseInt(seconds);
+      }
+
+      function calculateFatigueFactor(testTime300, testTime1_5Miles) {
+        return (
+          (Math.log(testTime300 / testTime1_5Miles) /
+            Math.log(300 / (1609 * 1.5))) *
+          100
+        );
+      }
+    </script>
+  </body>
 </html>
