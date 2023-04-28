@@ -19,19 +19,16 @@
 	</form>
 	<script>
 		function calculateFatigueFactor() {
-			const twoPointFiveMilesInMeters = 4023.36;
-			const threeHundredMetersInMeters = 300;
+  const time300m = document.getElementById("test300m").value;
+  const time1_5Mile = document.getElementById("test1_5mile").value;
 
-			const time300m = document.getElementById("test300m").value;
-			const time1_5Mile = document.getElementById("test1_5mile").value;
+  const time300mInSeconds = convertTimeToSeconds(time300m);
+  const time1_5MileInSeconds = convertTimeToSeconds(time1_5Mile);
 
-			const time300mInSeconds = convertTimeToSeconds(time300m);
-			const time1_5MileInSeconds = convertTimeToSeconds(time1_5Mile);
+  const fatigueFactor = ((Math.log(time1_5MileInSeconds) - Math.log(time300mInSeconds)) / Math.log(1609.34 / 300)) * 100;
 
-			const fatigueFactor = ((Math.log(time300mInSeconds / time1_5MileInSeconds)) / Math.log(threeHundredMetersInMeters / (1609 * 1.5))) - 1;
-
-			return fatigueFactor;
-		}
+  return fatigueFactor.toFixed(2);
+}
 
 		function displayTrainingPriority() {
 			const fatigueFactor = calculateFatigueFactor();
