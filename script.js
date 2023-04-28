@@ -1,3 +1,16 @@
+function displayTrainingPriority() {
+    const fatigueFactor = calculateFatigueFactor();
+    console.log("fatigueFactor", fatigueFactor);
+    const goal300mTime = calculateGoal300mTime(fatigueFactor);
+    console.log("goal300mTime", goal300mTime);
+    const trainingPriority = getTrainingPriority(fatigueFactor);
+    console.log("trainingPriority", trainingPriority);
+
+    document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
+    document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
+    document.getElementById("fatigue-factor").innerHTML = "Fatigue Factor: " + fatigueFactor + "%";
+}
+
 function calculateFatigueFactor() {
   const time300m = document.getElementById("test300m").value;
   const time1_5Mile = document.getElementById("test1_5mile").value;
