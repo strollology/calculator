@@ -1,33 +1,55 @@
-console.log
+<script>
+	function calculateFatigueFactor() {
+		const time300m = document.getElementById("test300m").value;
+		const time1_5Mile = document.getElementById("test1_5mile").value;
 
-const calculateButton = document.getElementById("calculate");
+		const time300mInSeconds = convertTimeToSeconds(time300m);
+		const time1_5MileInSeconds = convertTimeToSeconds(time1_5Mile);
 
-calculateButton.addEventListener("click", () => {
-  const test300m = document.getElementById("test300m").value;
-  const test1_5mile = document.getElementById("test1_5mile").value;
+		const fatigueFactor = ((Math.log(time1_5MileInSeconds) - Math.log(time300mInSeconds)) / Math.log(1609.34 / 300)) * 100;
 
-  if (test300m === "" || test1_5mile === "") {
-    document.getElementById("error").textContent =
-      "Please enter both test times.";
-    document.getElementById("result").textContent = "";
-  } else {
-    document.getElementById("error").textContent = "";
+		return fatigueFactor.toFixed(2);
+	}
 
-    const test300mSeconds = timeToSeconds(test300m);
-    const test1_5mileSeconds = timeToSeconds(test1_5mile);
+	function displayTrainingPriority() {
+		const fatigueFactor = calculateFatigueFactor();
+		const goal300mTime = calculateGoal300mTime(fatigueFactor);
 
-    const fatigueFactor =
-      ((test1_5mileSeconds - test300mSeconds) / test300mSeconds) * 100;
+		const trainingPriority = getTrainingPriority(fatigueFactor);
 
-    document.getElementById("result").textContent =
-      "Fatigue Factor: " + fatigueFactor.toFixed(1) + "%";
-  }
-});
+		document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
+		document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
+	}
 
-function timeToSeconds(time) {
-  const parts = time.split(":");
-  const minutes = parseInt(parts[0]);
-  const seconds = parseFloat(parts[1]);
-  return minutes * 60 + seconds;
-}
+	function calculateGoal300mTime(fatigueFactor) {
+		const twoPointFiveMilesInMeters = 4023.36;
+		const threeHundredMetersInMeters = 300;
 
+		const time1_5MileInSeconds = convertTimeToSeconds(document.getElementById("test1_5mile").value);
+
+		const goal300mTimeInSeconds = time1_5MileInSeconds * Math.pow(threeHundredMetersInMeters / (1609 * 1.5), fatigueFactor + 1);
+
+		return goal300mTimeInSeconds;
+	}
+
+	function getTrainingPriority(fatigueFactor) {
+		const threshold = 0.01;
+
+		if (fatigueFactor >= threshold) {
+			return "Endurance";
+		} else {
+			return "Speed";
+		}
+	}
+
+	function formatTime(timeInSeconds) {
+		const minutes = Math.floor(timeInSeconds / 60);
+		const seconds = (timeInSeconds - minutes * 60).toFixed(1);
+		return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+	}
+
+	function convertTimeToSeconds(timeString) {
+		const [minutes, seconds] = timeString.split(":");
+		return parseInt(minutes) * 60 + parseFloat(seconds);
+	}
+</script>
