@@ -14,17 +14,13 @@ function calculateFatigueFactor() {
 }
 
 function displayTrainingPriority() {
-  const fatigueFactor = calculateFatigueFactor();
-  const goal300mTime = calculateGoal300mTime(fatigueFactor);
+    const fatigueFactor = calculateFatigueFactor();
+    const goal300mTime = calculateGoal300mTime(fatigueFactor);
+    const trainingPriority = getTrainingPriority(fatigueFactor);
 
-  const trainingPriority = getTrainingPriority(fatigueFactor);
-
-  document.getElementById("priority").innerHTML =
-    "Training Priority: " + trainingPriority;
-  document.getElementById("goal-300m-time").innerHTML =
-    "Goal 300m Time: " + formatTime(goal300mTime);
-  document.getElementById("fatigue-factor").innerHTML =
-    "Fatigue Factor: " + fatigueFactor + "%";
+    document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
+    document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
+    document.getElementById("fatigue-factor").innerHTML = "Fatigue Factor: " + fatigueFactor + "%";
 }
 
 function calculateGoal300mTime(fatigueFactor) {
