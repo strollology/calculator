@@ -1,67 +1,59 @@
+/* Styling for the Fatigue Factor Calculator */
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
 h1 {
-  margin: 0 0 20px 0;
   text-align: center;
 }
 
-#form {
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin: 20px auto;
-}
-
-#form div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 5px 0;
-}
-
-#form label {
-  margin-right: 10px;
-  flex: 1;
-}
-
-#form input {
-  flex: 2;
-}
-
-#form button {
-  align-self: center;
-  margin: 10px 0;
-  padding: 5px 10px;
+form {
+  margin: 0 auto;
+  width: 400px;
+  border: 2px solid #ccc;
+  padding: 20px;
   border-radius: 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: white;
-  font-size: 16px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 #error {
   color: red;
-  margin: 5px 0;
+  margin-bottom: 10px;
 }
 
 #result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#optimal {
+  margin-top: 20px;
   text-align: center;
-  font-size: 24px;
-  margin-top: 30px;
 }
 
 #priority {
-  text-align: center;
-  font-size: 24px;
-  margin-top: 30px;
-}
-
-#goal {
-  text-align: center;
-  font-size: 24px;
-  margin-top: 30px;
+  margin-top: 10px;
 }
