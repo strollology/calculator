@@ -36,17 +36,28 @@
 			font-size: 20px;
 		}
 	</style>
-	<script>
-		function calculate() {
-			var test300m = document.getElementById("test300m").value;
-			var test1_5mile = document.getElementById("test1-5mile").value;
-			var fatigueFactor = Math.round((Math.log10(test300m / test1_5mile) / Math.log10(300 / (1609 * 1.5)) - 1) * 10000) / 100;
-			var speedGoal = (test300m * (1 / (Math.pow((fatigueFactor / 100) + 1, (Math.log10(300 / 200) / Math.log10(1.5)))))).toFixed(1);
-			if (fatigueFactor < 0) {
-				fatigueFactor = 0;
-			}
-			document.getElementById("result").innerHTML = "Fatigue Factor: " + fatigueFactor + "%" + "<br>" + "Training Priority: Speed Goal 300m Time: " + speedGoal + " seconds";
-			return false;
+	function calculate() {
+			const test300m = document.getElementById("test-300m").value;
+			const test1_5mile = document.getElementById("test-1-5-mile").value;
+			const test300mSeconds = timeToSeconds(test300m);
+			const test1_5mileSeconds = timeToSeconds(test1_5mile);
+			const fatigueFactor = ((Math.log10(300 / (test300mSeconds / 60)) / Math.log10(1609 / (test1_5mileSeconds / 60))) - 1) * 100;
+			const trainingPriority = fatigueFactor < 0 ? "Speed" : "Endurance";
+			const goal300mTime = secondsToTime(test300mSeconds * Math.pow(0.993, Math.abs(fatigueFactor)));
+
+			document.getElementById("result").innerHTML = `Fatigue Factor: ${fatigueFactor.toFixed(2)}%<br>Training Priority: ${trainingPriority} Goal 300m Time: ${goal300mTime}`;
+		}
+
+		function timeToSeconds(time) {
+			const [minutes, seconds, milliseconds] = time.split(":");
+			return (Number(minutes) * 60) + Number(seconds) + (Number(milliseconds) / 1000);
+		}
+
+		function secondsToTime(seconds) {
+			const minutes = Math.floor(seconds / 60);
+			const remainingSeconds = seconds - (minutes * 60);
+			const formattedSeconds = remainingSeconds.toFixed(1).toString().padStart(4, "0");
+			return `${minutes}:${formattedSeconds}`;
 		}
 	</script>
 </head>
