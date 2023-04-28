@@ -44,20 +44,36 @@ button {
   margin-bottom: 10px;
 }
 
-#result {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-#fatigue-factor {
-  margin-top: 10px;
-}
-
-#optimal {
+#training-result {
   margin-top: 20px;
+}
+
+#training-result h2 {
+  text-align: center;
+  font-weight: normal;
+}
+
+#training-result ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#training-result li {
   text-align: center;
 }
 
-#priority {
-  margin-top: 10px;
+#training-result li strong {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
 }
+
+#training-result li span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
