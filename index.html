@@ -1,71 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Training Priority Calculator</title>
-</head>
-<body>
-	<h1>Training Priority Calculator</h1>
+  <head>
+    <meta charset="UTF-8">
+    <title>Fatigue Factor Calculator</title>
+  </head>
+  <body>
+    <h1>Fatigue Factor Calculator</h1>
+    <p>Enter your test times below to calculate your fatigue factor:</p>
+    <p>300m Test Time: <input type="text" id="test300m" placeholder="mm:ss.s"></p>
+    <p>1.5-mile Test Time: <input type="text" id="test1_5mile" placeholder="mm:ss"></p>
+    <button id="calculate">Calculate</button>
+    <p id="error" style="color: red;"></p>
+    <p id="result"></p>
+    <p id="priority"></p>
 
-	<label for="test300m">300m Test Time (m:ss.s)</label><br>
-	<input type="text" id="test300m"><br>
+    <script>
+      function timeToSeconds(time) {
+        const parts = time.split(":");
+        const minutes = parseInt(parts[0]);
+        const seconds = parseFloat(parts[1]);
+        return minutes * 60 + seconds;
+      }
 
-	<label for="test1_5mile">1.5-mile Test Time (m:ss)</label><br>
-	<input type="text" id="test1_5mile"><br>
+      document.addEventListener("DOMContentLoaded", function() {
+        const calculateButton = document.getElementById("calculate");
+        const errorDiv = document.getElementById("error");
+        const resultDiv = document.getElementById("result");
+        const priorityDiv = document.getElementById("priority");
 
-	<button id="calculate">Calculate</button>
+        calculateButton.addEventListener("click", () => {
+          const test300m = document.getElementById("test300m").value;
+          const test1_5mile = document.getElementById("test1_5mile").value;
 
-	<div id="error" style="color:red;"></div>
-	<div id="result"></div>
-	<div id="priority"></div>
+          if (test300m === "" || test1_5mile === "") {
+            errorDiv.textContent = "Please enter both test times.";
+            resultDiv.textContent = "";
+            priorityDiv.textContent = "";
+          } else {
+            errorDiv.textContent = "";
 
-	<script>
-		function timeToSeconds(time) {
-		  const parts = time.split(":");
-		  const minutes = parseInt(parts[0]);
-		  const seconds = parseFloat(parts[1]);
-		  return minutes * 60 + seconds;
-		}
+            const test300mSeconds = timeToSeconds(test300m);
+            const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-		document.addEventListener("DOMContentLoaded", function() {
-			const calculateButton = document.getElementById("calculate");
-			const errorDiv = document.getElementById("error");
-			const resultDiv = document.getElementById("result");
-			const priorityDiv = document.getElementById("priority");
+            const fatigueFactor =
+              (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5))) * 100;
 
-			calculateButton.addEventListener("click", () => {
-			  const test300m = document.getElementById("test300m").value;
-			  const test1_5mile = document.getElementById("test1_5mile").value;
+            resultDiv.textContent =
+              "Fatigue Factor: " + Math.abs(fatigueFactor.toFixed(2)) + "%";
 
-			  if (test300m === "" || test1_5mile === "") {
-			    errorDiv.textContent = "Please enter both test times.";
-			    resultDiv.textContent = "";
-			    priorityDiv.textContent = "";
-			  } else {
-			    errorDiv.textContent = "";
-
-			    const test300mSeconds = timeToSeconds(test300m);
-			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
-
-			    const fatigueFactor = Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
-			    const goalDistance = fatigueFactor >= 0.2 ? "300m" : "1.5-mile";
-			    const goalTime = fatigueFactor >= 0.2 ?
-			      test300mSeconds * Math.pow(0.124274238447467, 1.205) :
-			      test1_5mileSeconds * Math.pow(8.04672, 1.205);
-
-			    resultDiv.textContent =
-			      "Fatigue Factor: " + (fatigueFactor * 100).toFixed(2) + "%";
-			    priorityDiv.textContent =
-			      "Training Priority: " + (fatigueFactor < 0.2 ? "Speed" : (fatigueFactor > 0.21 ? "Endurance" : "Balanced"));
-			    priorityDiv.textContent += "\nGoal " + goalDistance + " Time: " + formatTime(goalTime);
-			  }
-			});
-
-			function formatTime(timeInSeconds) {
-			  const minutes = Math.floor(timeInSeconds / 60);
-			  const seconds = (timeInSeconds % 60).toFixed(1);
-			  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-			}
-		});
-	</script>
-</body>
+            if (fatigueFactor < -0.20) {
+              priorityDiv.textContent = "Training Priority: Speed";
+            } else if (fatigueFactor > 0.21) {
+              priorityDiv.textContent = "Training Priority: Endurance";
+            } else {
+              priorityDiv.textContent = "Training Priority: Balanced";
+            }
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
