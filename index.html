@@ -2,58 +2,63 @@
 <html>
 <head>
 	<title>Fatigue Factor Calculator</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+		}
+		h1 {
+			font-size: 24px;
+		}
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+		input[type="text"] {
+			padding: 5px;
+			font-size: 16px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 10px;
+			width: 200px;
+		}
+		input[type="submit"] {
+			background-color: #008CBA;
+			color: #fff;
+			border: none;
+			padding: 10px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.result {
+			margin-top: 20px;
+			font-weight: bold;
+			font-size: 20px;
+		}
+	</style>
+	<script>
+		function calculate() {
+			var test300m = document.getElementById("test300m").value;
+			var test1_5mile = document.getElementById("test1-5mile").value;
+			var fatigueFactor = Math.round((Math.log10(test300m / test1_5mile) / Math.log10(300 / (1609 * 1.5)) - 1) * 10000) / 100;
+			var speedGoal = (test300m * (1 / (Math.pow((fatigueFactor / 100) + 1, (Math.log10(300 / 200) / Math.log10(1.5)))))).toFixed(1);
+			if (fatigueFactor < 0) {
+				fatigueFactor = 0;
+			}
+			document.getElementById("result").innerHTML = "Fatigue Factor: " + fatigueFactor + "%" + "<br>" + "Training Priority: Speed Goal 300m Time: " + speedGoal + " seconds";
+			return false;
+		}
+	</script>
 </head>
 <body>
 	<h1>Fatigue Factor Calculator</h1>
-	<form>
-		<label for="test300m">300m Test Time (mm:ss.t):</label>
-		<input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
-		<label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
-		<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
-		<button type="button" id="calculate">Calculate</button>
-		<div id="error"></div>
-		<div id="result"></div>
-		<div id="optimal">Optimal: 20-21%</div>
-		<div id="priority"></div>
+	<form onsubmit="return calculate()">
+		<label>300m Test Time (m:ss.0)</label>
+		<input type="text" id="test300m" placeholder="mm:ss.0" value="01:07">
+		<label>1.5-mile Test Time (mm:ss)</label>
+		<input type="text" id="test1-5mile" placeholder="mm:ss" value="13:47">
+		<input type="submit" value="Calculate">
 	</form>
-	<script>
-		const form = document.querySelector('#form');
-
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const test300 = document.querySelector('#test300').value;
-  const test1500 = document.querySelector('#test1500').value;
-  
-  // Convert test times to seconds
-  const time300 = Number(test300.split(':')[0]) * 60 + Number(test300.split(':')[1]);
-  const time1500 = Number(test1500.split(':')[0]) * 60 + Number(test1500.split(':')[1]);
-  
-  // Calculate fatigue factor
-  const fatigueFactor = ((time1500 - 510) / 10 - time300) / time300 * 100;
-  
-  // Determine training priority and goal time
-  let trainingPriority, goalTime;
-  if (fatigueFactor >= 20) {
-    trainingPriority = 'Endurance';
-    goalTime = '7:00';
-  } else if (fatigueFactor >= 10) {
-    trainingPriority = 'Stamina';
-    goalTime = '5:45';
-  } else if (fatigueFactor >= 0) {
-    trainingPriority = 'Speed';
-    goalTime = '0:52.9';
-  } else {
-    trainingPriority = 'Speed';
-    goalTime = '0:45.0';
-  }
-  
-  // Display results
-  document.querySelector('#fatigue').textContent = `Fatigue Factor: ${fatigueFactor.toFixed(2)}%`;
-  document.querySelector('#priority').textContent = `Training Priority: ${trainingPriority} Goal Time: ${goalTime}`;
-});
-
-	</script>
+	<div class="result" id="result"></div>
 </body>
 </html>
