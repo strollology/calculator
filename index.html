@@ -1,44 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
 	<title>Fatigue Factor Calculator</title>
-	<style>
-		label {
-			display: block;
-			margin-bottom: 5px;
-		}
-		input {
-			display: block;
-			margin-bottom: 10px;
-		}
-		button {
-			margin-top: 10px;
-		}
-		#error {
-			color: red;
-			font-weight: bold;
-			margin-top: 10px;
-		}
-		#result {
-			margin-top: 10px;
-		}
-		#priority {
-			margin-top: 10px;
-			font-weight: bold;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<h1>Fatigue Factor Calculator</h1>
-	<label for="test300m">300m Test Time (m:ss)</label>
-	<input type="text" id="test300m">
-	<label for="test1_5mile">1.5-mile Test Time (mm:ss)</label>
-	<input type="text" id="test1_5mile">
-	<button id="calculate">Calculate</button>
-	<div id="error"></div>
-	<div id="result"></div>
-	<div id="priority"></div>
+	<div id="container">
+		<h1>Fatigue Factor Calculator</h1>
+		<div id="form">
+			<label for="test300m">300m Test Time:</label>
+			<input type="text" id="test300m" name="test300m" placeholder="m:ss" pattern="\d{1,2}:\d{2}.\d" required>
+			<br>
+			<label for="test1_5mile">1.5-mile Test Time:</label>
+			<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss" pattern="\d{1,2}:\d{2}" required>
+			<br>
+			<button type="button" id="calculate">Calculate</button>
+			<br>
+			<div id="error"></div>
+			<div id="result"></div>
+			<div id="priority"></div>
+		</div>
+	</div>
+
 	<script>
 		function timeToSeconds(time) {
 		  const parts = time.split(":");
@@ -67,17 +50,16 @@
 			    const test300mSeconds = timeToSeconds(test300m);
 			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-			  const fatigueFactor =
-  (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5))) * 100;
-
+			    const fatigueFactor =
+			      (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5))) * 100;
 
 			    resultDiv.textContent =
 			      "Fatigue Factor: " + fatigueFactor.toFixed(2) + "%";
 
-			    if (fatigueFactor < 20.5) {
+			    if (fatigueFactor < 0.20) {
 			      priorityDiv.textContent = "Training Priority: Speed Goal 300m Time: 0:52.9";
-			    } else if (fatigueFactor > 20.6) {
-			      priorityDiv.textContent = "Training Priority: Endurance Goal 1.5-mile Time: 11:40.0";
+			    } else if (fatigueFactor > 0.21) {
+			      priorityDiv.textContent = "Training Priority: Endurance Goal 1.5-mile Time: " + "170:04.1";
 			    } else {
 			      priorityDiv.textContent = "Training Priority: Balanced";
 			    }
