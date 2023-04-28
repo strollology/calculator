@@ -1,72 +1,44 @@
-function displayTrainingPriority() {
-    const fatigueFactor = calculateFatigueFactor();
-    console.log("fatigueFactor", fatigueFactor);
-    const goal300mTime = calculateGoal300mTime(fatigueFactor);
-    console.log("goal300mTime", goal300mTime);
-    const trainingPriority = getTrainingPriority(fatigueFactor);
-    console.log("trainingPriority", trainingPriority);
+function timeToSeconds(time) {
+		  const parts = time.split(":");
+		  const minutes = parseInt(parts[0]);
+		  const seconds = parseFloat(parts[1]);
+		  return minutes * 60 + seconds;
+		}
 
-    document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
-    document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
-    document.getElementById("fatigue-factor").innerHTML = "Fatigue Factor: " + fatigueFactor + "%";
-}
+		document.addEventListener("DOMContentLoaded", function() {
+			const calculateButton = document.getElementById("calculate");
+			const errorDiv = document.getElementById("error");
+			const resultDiv = document.getElementById("result");
+			const priorityDiv = document.getElementById("priority");
 
-function calculateFatigueFactor() {
-  const time300m = document.getElementById("test300m").value;
-  const time1_5Mile = document.getElementById("test1_5mile").value;
+			calculateButton.addEventListener("click", () => {
+			  const test300m = document.getElementById("test300m").value;
+			  const test1_5mile = document.getElementById("test1_5mile").value;
 
-  const time300mInSeconds = convertTimeToSeconds(time300m);
-  const time1_5MileInSeconds = convertTimeToSeconds(time1_5Mile);
+			  if (test300m === "" || test1_5mile === "") {
+			    errorDiv.textContent = "Please enter both test times.";
+			    resultDiv.textContent = "";
+			    priorityDiv.textContent = "";
+			  } else {
+			    errorDiv.textContent = "";
 
-  const fatigueFactor =
-    ((Math.log(time1_5MileInSeconds) - Math.log(time300mInSeconds)) /
-      Math.log(1609.34 / 300)) *
-    100;
+			    const test300mSeconds = timeToSeconds(test300m);
+			    const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-  return fatigueFactor.toFixed(2);
-}
+			  const fatigueFactor =
+(Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5))) / 100;
 
-function displayTrainingPriority() {
-    const fatigueFactor = calculateFatigueFactor();
-    const goal300mTime = calculateGoal300mTime(fatigueFactor);
-    const trainingPriority = getTrainingPriority(fatigueFactor);
 
-    document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
-    document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
-    document.getElementById("fatigue-factor").innerHTML = "Fatigue Factor: " + fatigueFactor + "%";
-}
+			    resultDiv.textContent =
+			      "Fatigue Factor: " + (fatigueFactor * 100).toFixed(2) + "%";
 
-function calculateGoal300mTime(fatigueFactor) {
-  const twoPointFiveMilesInMeters = 4023.36;
-  const threeHundredMetersInMeters = 300;
-
-  const time1_5MileInSeconds = convertTimeToSeconds(
-    document.getElementById("test1_5mile").value
-  );
-
-  const goal300mTimeInSeconds =
-    time1_5MileInSeconds *
-    Math.pow(threeHundredMetersInMeters / (1609 * 1.5), fatigueFactor + 1);
-
-  return goal300mTimeInSeconds;
-}
-
-function getTrainingPriority(fatigueFactor) {
-  const threshold = 0.01;
-
-  if (fatigueFactor >= threshold) {
-    return "Endurance";
-  } else {
-    return "Speed";
-  }
-}
-
-function formatTime(timeInSeconds) {
-  const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = (timeInSeconds - minutes * 60).toFixed(1);
-  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-}
-
-document
-  .getElementById("calculate-button")
-  .addEventListener("click", displayTrainingPriority);
+			    if (fatigueFactor < 0.20) {
+			      priorityDiv.textContent = "Training Priority: Speed";
+			    } else if (fatigueFactor > 0.21) {
+			      priorityDiv.textContent = "Training Priority: Endurance";
+			    } else {
+			      priorityDiv.textContent = "Training Priority: Balanced";
+			    }
+			  }
+			});
+		});
