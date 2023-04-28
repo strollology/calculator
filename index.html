@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Fatigue Factor Calculator</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 	<h1>Fatigue Factor Calculator</h1>
-	<form>
-		<label for="test300m">300m Test Time (mm:ss.t):</label>
-		<input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
-		<label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
-		<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
-		<button type="button" id="calculate">Calculate</button>
-		<div id="error"></div>
-		<div id="result"></div>
-		<div id="optimal">Optimal: 20-21%</div>
-		<div id="priority"></div>
-	</form>
+	<p>Enter your test times below to calculate your fatigue factor:</p>
+	<label for="test300m">300m Test Time (MM:SS):</label>
+	<input type="text" id="test300m"><br>
+	<label for="test1_5mile">1.5 Mile Test Time (MM:SS):</label>
+	<input type="text" id="test1_5mile"><br>
+	<button id="calculate-button">Calculate</button>
+	<div id="results">
+		<p id="priority"></p>
+		<p id="goal-300m-time"></p>
+	</div>
 	<script src="script.js"></script>
 </body>
 </html>
