@@ -47,11 +47,11 @@
         const test300mSeconds = timeToSeconds(test300m);
         const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-        const fatigueFactor =
-          (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(1609.34 / 300)) *
-          100;
+const fatigueFactor = Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
+const fatiguePercentage = (fatigueFactor / 0.01).toFixed(2);
 
-        resultDiv.textContent = "Fatigue Factor: " + fatigueFactor.toFixed(2) + "%";
+resultDiv.textContent = "Fatigue Factor: " + fatiguePercentage + "%";
+
 
         if (fatigueFactor < 20.5) {
           priorityDiv.textContent = "Training Priority: Speed";
