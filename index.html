@@ -20,18 +20,9 @@
 	<script>
 function timeToSeconds(time) {
   const parts = time.split(":");
-  if (parts.length === 2) {
-    const minutes = parseInt(parts[0]);
-    const seconds = parseFloat(parts[1]);
-    return minutes * 60 + seconds;
-  } else if (parts.length === 3) {
-    const minutes = parseInt(parts[0]);
-    const seconds = parseInt(parts[1]);
-    const milliseconds = parseInt(parts[2]);
-    return minutes * 60 + seconds + (milliseconds / 1000);
-  } else {
-    return NaN;
-  }
+  const minutes = parseInt(parts[0]);
+  const seconds = parseFloat(parts[1]);
+  return minutes * 60 + seconds;
 }
     document.addEventListener("DOMContentLoaded", function() {
       const calculateButton = document.getElementById("calculate");
@@ -42,7 +33,7 @@ function timeToSeconds(time) {
 
       calculateButton.addEventListener("click", () => {
         const test300m = document.getElementById("test300m").value;
-        const test1_5mile = document.getElementById("test1_5mile").value;
+const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
         if (test300m === "" || test1_5mile === "") {
           errorDiv.textContent = "Please enter both test times.";
