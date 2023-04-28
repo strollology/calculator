@@ -47,7 +47,7 @@
         const test300mSeconds = timeToSeconds(test300m);
         const test1_5mileSeconds = timeToSeconds(test1_5mile);
 
-const fatigueFactor = Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(300 / (1609 * 1.5));
+const ffatigueFactor = (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(1.5 / 0.3)) * 100;
 const fatiguePercentage = (fatigueFactor / 0.01).toFixed(2);
 
 resultDiv.textContent = "Fatigue Factor: " + fatiguePercentage + "%";
