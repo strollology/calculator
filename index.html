@@ -5,82 +5,54 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<div id="container">
-		<h1>Fatigue Factor Calculator</h1>
-		<div id="form">
-			<label for="test300m">300m Test Time:</label>
-			<input type="text" id="test300m" name="test300m" placeholder="m:ss" pattern="\d{1,2}:\d{2}.\d" required>
-			<br>
-			<label for="test1_5mile">1.5-mile Test Time:</label>
-			<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss" pattern="\d{1,2}:\d{2}" required>
-			<br>
-			<button type="button" id="calculate">Calculate</button>
-			<br>
-			<div id="error"></div>
-			<div id="result"></div>
-			<div id="priority"></div>
-		</div>
-	</div>
-
+	<h1>Fatigue Factor Calculator</h1>
+	<form>
+		<label for="test300m">300m Test Time (mm:ss.t):</label>
+		<input type="text" id="test300m" name="test300m" placeholder="mm:ss.t">
+		<label for="test1_5mile">1.5 Mile Test Time (mm:ss.t):</label>
+		<input type="text" id="test1_5mile" name="test1_5mile" placeholder="mm:ss.t">
+		<button type="button" id="calculate">Calculate</button>
+		<div id="error"></div>
+		<div id="result"></div>
+		<div id="optimal">Optimal: 20-21%</div>
+		<div id="priority"></div>
+	</form>
 	<script>
-		function timeToSeconds(time) {
-  const parts = time.split(":");
-  const minutes = parseInt(parts[0]);
-  const seconds = parseFloat(parts[1]);
-  return minutes * 60 + seconds;
-}
+		const form = document.querySelector('#form');
 
-document.addEventListener("DOMContentLoaded", function () {
-  const calculateButton = document.getElementById("calculate");
-  const errorDiv = document.getElementById("error");
-  const resultDiv = document.getElementById("result");
-  const priorityDiv = document.getElementById("priority");
-
-  calculateButton.addEventListener("click", () => {
-    const test300m = document.getElementById("test300m").value;
-    const test1_5mile = document.getElementById("test1_5mile").value;
-
-    if (test300m === "" || test1_5mile === "") {
-      errorDiv.textContent = "Please enter both test times.";
-      resultDiv.textContent = "";
-      priorityDiv.textContent = "";
-    } else {
-      errorDiv.textContent = "";
-
-      const test300mSeconds = timeToSeconds(test300m);
-      const test1_5mileSeconds = timeToSeconds(test1_5mile);
-
-      const fatigueFactor =
-        (Math.log(test1_5mileSeconds / test300mSeconds) / Math.log(1.5)) *
-        100;
-
-      resultDiv.textContent =
-        "Fatigue Factor: " + fatigueFactor.toFixed(2) + "%";
-
-      if (fatigueFactor < 20) {
-        priorityDiv.textContent =
-          "Training Priority: Speed Goal 300m Time: " +
-          formatTime(calculateGoalTime(300, test300mSeconds, 52.9));
-      } else if (fatigueFactor > 21) {
-        priorityDiv.textContent = "Training Priority: Endurance";
-      } else {
-        priorityDiv.textContent = "Training Priority: Balanced";
-      }
-    }
-  });
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const test300 = document.querySelector('#test300').value;
+  const test1500 = document.querySelector('#test1500').value;
+  
+  // Convert test times to seconds
+  const time300 = Number(test300.split(':')[0]) * 60 + Number(test300.split(':')[1]);
+  const time1500 = Number(test1500.split(':')[0]) * 60 + Number(test1500.split(':')[1]);
+  
+  // Calculate fatigue factor
+  const fatigueFactor = ((time1500 - 510) / 10 - time300) / time300 * 100;
+  
+  // Determine training priority and goal time
+  let trainingPriority, goalTime;
+  if (fatigueFactor >= 20) {
+    trainingPriority = 'Endurance';
+    goalTime = '7:00';
+  } else if (fatigueFactor >= 10) {
+    trainingPriority = 'Stamina';
+    goalTime = '5:45';
+  } else if (fatigueFactor >= 0) {
+    trainingPriority = 'Speed';
+    goalTime = '0:52.9';
+  } else {
+    trainingPriority = 'Speed';
+    goalTime = '0:45.0';
+  }
+  
+  // Display results
+  document.querySelector('#fatigue').textContent = `Fatigue Factor: ${fatigueFactor.toFixed(2)}%`;
+  document.querySelector('#priority').textContent = `Training Priority: ${trainingPriority} Goal Time: ${goalTime}`;
 });
-
-function formatTime(timeInSeconds) {
-  const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = (timeInSeconds % 60).toFixed(1);
-  return `${minutes}:${seconds}`;
-}
-
-function calculateGoalTime(distance, testTimeSeconds, goalSpeed) {
-  const testSpeed = distance / testTimeSeconds;
-  const goalTimeSeconds = distance / goalSpeed;
-  return goalTimeSeconds - (testTimeSeconds - goalTimeSeconds) * testSpeed;
-}
 
 	</script>
 </body>
