@@ -33,15 +33,17 @@ function calculateGoal300mTime(fatigueFactor) {
     return goal300mTimeInSeconds;
 }
 
-function getTrainingPriority(fatigueFactor) {
-    const threshold = 0.01;
+function displayTrainingPriority() {
+    const fatigueFactor = calculateFatigueFactor();
+    const goal300mTime = calculateGoal300mTime(fatigueFactor);
 
-    if (fatigueFactor >= threshold) {
-        return "Endurance";
-    } else {
-        return "Speed";
-    }
+    const trainingPriority = getTrainingPriority(fatigueFactor);
+
+    document.getElementById("priority").innerHTML = "Training Priority: " + trainingPriority;
+    document.getElementById("goal-300m-time").innerHTML = "Goal 300m Time: " + formatTime(goal300mTime);
+    document.getElementById("fatigue-factor").innerHTML = "Fatigue Factor: " + fatigueFactor.toFixed(2) + "%";
 }
+
 
 function formatTime(timeInSeconds) {
     const minutes = Math.floor(timeInSeconds / 60);
