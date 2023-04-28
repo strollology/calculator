@@ -1,5 +1,4 @@
-<script>
-	function calculateFatigueFactor() {
+function calculateFatigueFactor() {
 	const time300m = document.getElementById("test300m").value;
 	const time1_5Mile = document.getElementById("test1_5mile").value;
 
@@ -52,4 +51,3 @@ function convertTimeToSeconds(timeString) {
 	const [minutes, seconds] = timeString.split(":");
 	return parseInt(minutes) * 60 + parseFloat(seconds);
 }
-</script>
