@@ -49,6 +49,10 @@ button {
   font-weight: bold;
 }
 
+#fatigue-factor {
+  margin-top: 10px;
+}
+
 #optimal {
   margin-top: 20px;
   text-align: center;
