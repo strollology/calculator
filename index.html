@@ -2,15 +2,20 @@
 <html>
   <head>
     <title>My Title</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
     <h1>My Heading</h1>
-    <input type="text" id="test300m" />
-    <input type="text" id="test1_5mile" />
-    <button id="calculate-button">Calculate</button>
-    <div id="fatigue-factor"></div>
-    <div id="priority"></div>
-    <div id="goal-300m-time"></div>
+    <form>
+      <label>Time for 300m (MM:SS):</label>
+      <input type="text" id="test300m" />
+      <label>Time for 1.5 miles (MM:SS):</label>
+      <input type="text" id="test1_5mile" />
+      <button id="calculate-button">Calculate</button>
+      <div id="priority"></div>
+      <div id="goal-300m-time"></div>
+      <div id="fatigue-factor"></div>
+    </form>
     <script src="script.js"></script>
   </body>
 </html>
