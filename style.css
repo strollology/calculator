@@ -1,6 +1,6 @@
 /* Styling for the Fatigue Factor Calculator */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Helvetica neue, sans-serif;
 }
 
 h1 {
@@ -21,7 +21,7 @@ label {
 }
 
 input[type="text"] {
-  width: 90%;
+  width: 80%;
   padding: 8px 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -32,7 +32,7 @@ button {
   display: block;
   margin: 0 auto;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #1991eb;
   color: white;
   border: none;
   border-radius: 4px;
